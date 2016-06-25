@@ -51,43 +51,95 @@ namespace Robot2
         {
             while (_worker != null && !_worker.CancellationPending)
             {
-                try
-                {
-                    var result = await ServiceBusHelper.ReceiveAndDeleteMessage();
-                    var json = JsonObject.Parse(result);
-                    var action = json.GetNamedString("action");
+                await ProcessMessage(await ServiceBusHelper.ReceiveAndDeleteMessage());
 
-                    switch (action)
-                    {
-                        case "Stop":
-                            _twoMotorsDriver.Stop();
-                            _isMovingForward = false;
-                            break;
-                        case "MoveForward":
-                            _twoMotorsDriver.MoveForward();
-                            _isMovingForward = true;
-                            break;
-                        case "MoveBack":
-                            _twoMotorsDriver.MoveBackward();
-                            _isMovingForward = false;
-                            break;
-
-                        case "Turn":
-                            var angle = int.Parse(json.GetNamedString("param"));
-
-                            await _uln2003Driver.TurnAsync(angle, TurnDirection.Right);
-                            //await _twoMotorsDriver.TurnRightAsync(angle);
-
-                            _isMovingForward = false;
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    await WriteLog(ex.Message);
-                }
                 await Task.Delay(1000);
             }
+        }
+
+        private async Task ProcessMessage(string message)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(message))
+                    return;
+
+                var json = JsonObject.Parse(message);
+
+                var highestInent = GetHighestInent(json);
+
+                if (string.IsNullOrWhiteSpace(highestInent))
+                    return;
+
+                switch (highestInent.ToLower())
+                {
+                    case "stop":
+                        _twoMotorsDriver.Stop();
+                        _isMovingForward = false;
+                        break;
+                    case "moveforward":
+                        _twoMotorsDriver.MoveForward();
+                        _isMovingForward = true;
+                        break;
+                    case "movebackward":
+                        _twoMotorsDriver.MoveBackward();
+                        _isMovingForward = false;
+                        break;
+                    case "turn":
+
+                        var direction = GetHighestEntity(json);
+                        if (!string.IsNullOrWhiteSpace(direction))
+                        {
+                            if (direction == "right")
+                                await _twoMotorsDriver.TurnRightAsync();
+                            else
+                                await _twoMotorsDriver.TurnLeftAsync();
+                        }
+                        _isMovingForward = false;
+                        break;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                await WriteLog(ex.Message);
+            }
+        }
+
+        private string GetHighestInent(JsonObject json)
+        {
+            var intents = json.GetNamedArray("intents");
+            var highestIntent = "";
+            double highestIntentScore = 0;
+            foreach (var jsonValue in intents)
+            {
+                var intent = (JsonObject)jsonValue;
+                var score = intent.GetNamedNumber("score");
+                if (!(score > highestIntentScore))
+                    continue;
+                highestIntentScore = score;
+                highestIntent = intent.GetNamedString("intent");
+            }
+
+            return highestIntent;
+        }
+
+        private string GetHighestEntity(JsonObject json)
+        {
+            var entities = json.GetNamedArray("entities");
+            var highestEntity = "";
+            double highestEntityScore = 0;
+            foreach (var jsonValue in entities)
+            {
+                var entity = (JsonObject)jsonValue;
+                var score = entity.GetNamedNumber("score");
+                if (!(score > highestEntityScore))
+                    continue;
+                highestEntityScore = score;
+                highestEntity = entity.GetNamedString("entity");
+            }
+
+            return highestEntity;
         }
 
         private async void AvoidCrash_DoWork(object sender, DoWorkEventArgs e)
