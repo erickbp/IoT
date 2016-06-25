@@ -110,7 +110,7 @@ namespace RobotSpeech
         private void OnIntent(object sender, SpeechIntentEventArgs e)
         {
             WriteToLog(e.Payload);
-            //_queueClient.Send(new BrokeredMessage(new MemoryStream(Encoding.UTF8.GetBytes(e.Payload))));
+            _queueClient.Send(new BrokeredMessage(new MemoryStream(Encoding.UTF8.GetBytes(e.Payload))));
         }
 
         private void StartOnClick(object sender, RoutedEventArgs e)
