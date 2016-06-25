@@ -113,7 +113,7 @@ namespace Robot2
             double highestIntentScore = 0;
             foreach (var jsonValue in intents)
             {
-                var intent = (JsonObject)jsonValue;
+                var intent = jsonValue.GetObject();
                 var score = intent.GetNamedNumber("score");
                 if (!(score > highestIntentScore))
                     continue;
@@ -131,7 +131,7 @@ namespace Robot2
             double highestEntityScore = 0;
             foreach (var jsonValue in entities)
             {
-                var entity = (JsonObject)jsonValue;
+                var entity = jsonValue.GetObject();
                 var score = entity.GetNamedNumber("score");
                 if (!(score > highestEntityScore))
                     continue;

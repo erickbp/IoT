@@ -12,7 +12,7 @@ namespace Robot2
     {
         private const string BaseAddress = "https://RobotSpeech.servicebus.windows.net/";
         private const string QueueName = "robotcar1";
-        private const string SasKeyName = "ConsumersSharedAccessKey";
+        private const string SasKeyName = "RootManageSharedAccessKey";
         private const string SasKeyValue = "5hKuqKFPckVoz9mtCBHXuKbIZ14GjOV5ky0sdgAnDy8=";
 
         static string _token;
@@ -26,7 +26,7 @@ namespace Robot2
             try
             {
                 var httpClient = new HttpClient();
-                var fullAddress = BaseAddress + QueueName + "/messages/head" + "?timeout=3600000";
+                var fullAddress = BaseAddress + QueueName + "/messages/head" + "?timeout=3600";
 
                 httpClient.DefaultRequestHeaders.Add("Authorization", _token);
                 response = await httpClient.DeleteAsync(fullAddress);
