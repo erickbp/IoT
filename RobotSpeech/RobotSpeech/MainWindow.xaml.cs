@@ -27,6 +27,7 @@ namespace RobotSpeech
            // IniWithoutLuis();
 
             InitWithLuis();
+
             _queueClient = QueueClient.Create(QueueName);
         }
 
