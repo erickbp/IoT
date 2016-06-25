@@ -1,0 +1,16 @@
+﻿<Window x:Class="RobotSpeech.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RobotSpeech"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="700" Width="850">
+
+    <StackPanel Orientation="Horizontal">
+        <Button VerticalAlignment="Top" x:Name="StartButton" HorizontalAlignment="Left" Margin="10,10,0,0" Padding="20,5" Click="StartOnClick">Start</Button>
+        <ScrollViewer Width="740">
+            <TextBlock x:Name="Log" Margin="10" Text="" TextWrapping="Wrap" Background="AliceBlue"></TextBlock>
+        </ScrollViewer>
+    </StackPanel>
+</Window>

@@ -1,0 +1,24 @@
+﻿<Window x:Class="RemoteController.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RemoteController"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="525">
+    <Canvas>
+        <Button Content="Go foward" Click="GoFowardButton" Width="80" Height="80" Canvas.Left="216" />
+        <Button Content="Stop" Click="StopButton" Width="80" Height="80" Canvas.Left="216" Canvas.Top="109"/>
+        <Button Content="Turn Right" Click="TurnRightButton" Width="80" Height="80" Canvas.Left="409" Canvas.Top="109"/>
+        <Button Content="Turn Left" Click="TrunLeftButton" Width="80" Height="80" Canvas.Left="59" Canvas.Top="109"/>
+        <Button Content="Go backward" Click="GoBackwardButton" Width="80" Height="80" Canvas.Left="216" Canvas.Top="231"/>
+
+        <Button Content="Top Right" Click="TopRightButton" Width="80" Height="80" Canvas.Left="409"/>
+        <Button Content="Top Left" Click="TopLeftButton" Width="80" Height="80" Canvas.Left="59"/>
+        <Button Content="Bottom Left" Click="BottomLeftButton" Width="80" Height="80" Canvas.Left="59" Canvas.Top="231"/>
+        <Button Content="Bottom Right" Click="BottomRightButton" Width="80" Height="80" Canvas.Left="409" Canvas.Top="231"/>
+
+        <Button Content="Stepper Left" Click="StepperLeftButton" Width="80" Height="80" Canvas.Left="59" Canvas.Top="331"/>
+        <Button Content="Stepper Right" Click="StepperRightButton" Width="80" Height="80" Canvas.Left="409" Canvas.Top="331"/>
+    </Canvas>
+</Window>

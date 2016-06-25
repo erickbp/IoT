@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Windows.Devices.Gpio;
 
-namespace Stepper_Motor
+namespace Robot2
 {
     public class Uln2003Driver : IDisposable
     {
@@ -55,21 +52,21 @@ namespace Stepper_Motor
         public async Task TurnAsync(int degree, TurnDirection direction,
             DrivingMethod drivingMethod = DrivingMethod.FullStep)
         {
-            var steps = 0;
+            int steps;
             GpioPinValue[][] methodSequence;
             switch (drivingMethod)
             {
                 case DrivingMethod.WaveDrive:
                     methodSequence = _waveDriveSequence;
-                    steps = (int) Math.Ceiling(degree/0.1767478397486253);
+                    steps = (int)Math.Ceiling(degree / 0.1767478397486253);
                     break;
                 case DrivingMethod.FullStep:
                     methodSequence = _fullStepSequence;
-                    steps = (int) Math.Ceiling(degree/0.1767478397486253);
+                    steps = (int)Math.Ceiling(degree / 0.1767478397486253);
                     break;
                 case DrivingMethod.HalfStep:
                     methodSequence = _haveStepSequence;
-                    steps = (int) Math.Ceiling(degree/0.0883739198743126);
+                    steps = (int)Math.Ceiling(degree / 0.0883739198743126);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(drivingMethod), drivingMethod, null);
@@ -81,10 +78,10 @@ namespace Stepper_Motor
                 {
                     for (var i = 0; i < 4; i++)
                     {
-                        _gpioPins[i].Write(methodSequence[direction == TurnDirection.Left ? i : 3 - i][j]);
+                        _gpioPins[i].Write(methodSequence[direction == TurnDirection.Right ? i : 3 - i][j]);
                     }
                     await Task.Delay(5);
-                    counter ++;
+                    counter++;
                     if (counter == steps)
                         break;
                 }
