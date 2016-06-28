@@ -24,7 +24,7 @@ namespace RobotSpeech
 
         private void MyInit()
         {
-           // IniWithoutLuis();
+            // IniWithoutLuis();
 
             InitWithLuis();
 
@@ -82,9 +82,10 @@ namespace RobotSpeech
             Dispatcher.Invoke(() =>
             {
                 _micClient.EndMicAndRecognition();
-                StartButton.IsEnabled = true;
+                RecordButton.IsEnabled = true;
+                RecordButton.Content = "Record";
             });
-          
+
             var log = "";
 
             for (var i = 0; i < e.PhraseResponse.Results.Length; i++)
@@ -103,30 +104,43 @@ namespace RobotSpeech
 
         private void OnMicrophoneStatus(object sender, MicrophoneEventArgs e)
         {
-            WriteToLog(e.Recording
-                ? "****************** I'm recording ************************"
-                : "================== I'm NO recording =====================");
+            //WriteToLog(e.Recording
+            //    ? "****************** I'm recording ************************"
+            //    : "================== I'm NO recording =====================");
         }
 
         private void OnIntent(object sender, SpeechIntentEventArgs e)
         {
-            WriteToLog(e.Payload);
-            _queueClient.Send(new BrokeredMessage(new MemoryStream(Encoding.UTF8.GetBytes(e.Payload))));
+            WriteToLog(e.Payload, false);
+           // _queueClient.Send(new BrokeredMessage(new MemoryStream(Encoding.UTF8.GetBytes(e.Payload))));
         }
 
-        private void StartOnClick(object sender, RoutedEventArgs e)
+        private void RecordOnClick(object sender, RoutedEventArgs e)
         {
-            StartButton.IsEnabled = false;
+            RecordButton.IsEnabled = false;
+            RecordButton.Content = "Recording...";
+
+            PartialResults.Text = "";
+            FinalResult.Text = "";
+
             _micClient.StartMicAndRecognition();
         }
 
-        private void WriteToLog(string log)
+        private void WriteToLog(string log, bool partialResultLog = true)
         {
             Dispatcher.Invoke(() =>
             {
-                Log.Text += log + "\r\n";
+                if (partialResultLog)
+                    PartialResults.Text += log + "\r\n";
+                else
+                    FinalResult.Text += log + "\r\n";
             });
         }
 
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _micClient.EndMicAndRecognition();
+            _micClient.Dispose();
+        }
     }
 }

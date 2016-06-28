@@ -5,12 +5,29 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:RobotSpeech"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="850">
+        Title="MainWindow" MinHeight="700" MinWidth="850" Closing="Window_Closing">
 
-    <StackPanel Orientation="Horizontal">
-        <Button VerticalAlignment="Top" x:Name="StartButton" HorizontalAlignment="Left" Margin="10,10,0,0" Padding="20,5" Click="StartOnClick">Start</Button>
-        <ScrollViewer Width="740">
-            <TextBlock x:Name="Log" Margin="10" Text="" TextWrapping="Wrap" Background="AliceBlue"></TextBlock>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Button VerticalAlignment="Top" x:Name="RecordButton" HorizontalAlignment="Left" Margin="10,10,0,0" Padding="20,5" Click="RecordOnClick">Record</Button>
+        <TextBlock Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Text="Partial results"/>
+        <TextBlock Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20" Text="Final results"/>
+
+        <ScrollViewer Grid.Column="0" Grid.Row="2">
+            <TextBlock x:Name="PartialResults" Margin="10" Text="" TextWrapping="Wrap" Background="AliceBlue"></TextBlock>
         </ScrollViewer>
-    </StackPanel>
+        <ScrollViewer Grid.Column="1" Grid.Row="2">
+            <TextBlock x:Name="FinalResult" Margin="10" Text="" TextWrapping="Wrap" Background="AliceBlue"></TextBlock>
+        </ScrollViewer>
+    </Grid>
+    
 </Window>
